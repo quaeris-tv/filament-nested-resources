@@ -3,13 +3,13 @@
 namespace SevendaysDigital\FilamentNestedResources;
 
 use Closure;
-use Filament\Resources\Pages\Page;
-use Filament\Resources\Resource;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Routing\Exceptions\UrlGenerationException;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Filament\Resources\Resource;
+use Filament\Resources\Pages\Page;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Routing\Exceptions\UrlGenerationException;
 
 abstract class NestedResource extends Resource
 {
@@ -17,8 +17,10 @@ abstract class NestedResource extends Resource
 
     protected static bool $shouldRegisterNavigationWhenInContext = true;
 
+    protected static string | array $middlewares = [];
+
     /**
-     * @return resource|NestedResource
+     * @return class-string<resource|NestedResource>
      */
     abstract public static function getParent(): string;
 
@@ -70,7 +72,16 @@ abstract class NestedResource extends Resource
         };
     }
 
-    public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+    public static function getMiddlewares(): string | array
+    {
+        return static::$middlewares;
+    }
+
+
+    /**
+     * @param  array<mixed>  $params
+     */
+    public static function getUrl(string $name = 'index', array $params = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
     {
         if (! is_array($params)) {
             $params = [$params];
@@ -96,15 +107,16 @@ abstract class NestedResource extends Resource
     }
 
     /**
+     * @param class-string<Resource|NestedResource> $parent
      * @return NestedEntry[]
      */
     public static function getParentTree(string $parent, array $urlParams = []): array
     {
-        /** @var $parent Resource|NestedResource */
         $singularSlug = Str::camel(Str::singular($parent::getSlug()));
 
         $list = [];
-        if (new $parent() instanceof NestedResource) {
+        //if (new $parent() instanceof NestedResource) {
+        if(method_exists($parent, 'getParent')) {
             $list = [...$list, ...static::getParentTree($parent::getParent(), $urlParams)];
         }
 
@@ -131,12 +143,17 @@ abstract class NestedResource extends Resource
         return $list;
     }
 
+    /**
+     * @param class-string<Resource|NestedResource> $parent
+     */
     public static function getParentParametersForUrl(string $parent, array $urlParameters = []): array
     {
-        /** @var $parent Resource|NestedResource */
+
         $list = [];
+
         $singularSlug = Str::camel(Str::singular($parent::getSlug()));
-        if (new $parent() instanceof NestedResource) {
+        //if (new $parent() instanceof NestedResource) {
+        if(method_exists($parent, 'getParent')) {
             $list = static::getParentParametersForUrl($parent::getParent(), $urlParameters);
         }
         $list[$singularSlug] = Route::current()?->parameter(
@@ -153,7 +170,7 @@ abstract class NestedResource extends Resource
         return $list;
     }
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         if (static::getParentId()) {
             return static::getParent()::getRecordTitle(

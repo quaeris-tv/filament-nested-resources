@@ -9,12 +9,12 @@ use SevendaysDigital\FilamentNestedResources\NestedResource;
 class ChildResourceLink extends TextColumn
 {
     /**
-     * @var NestedResource
+     * @var class-string<NestedResource>
      */
     private string $resourceClass;
 
     /**
-     * @param  NestedResource  $name
+     * @param  class-string<NestedResource>  $name
      */
     public static function make(string $name): static
     {
