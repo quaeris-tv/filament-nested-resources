@@ -18,10 +18,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use SevendaysDigital\FilamentNestedResources\NestedResource;
 
-/**
+/*
  * @extends \Filament\Resources\Pages\EditRecord
  * @extends \Filament\Resources\Pages\ViewRecord
  * @extends \Filament\Resources\Pages\ListRecords
+ */
+
+/**
+ * --
  */
 trait NestedPage
 {

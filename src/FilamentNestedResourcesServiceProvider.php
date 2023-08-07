@@ -2,10 +2,10 @@
 
 namespace SevendaysDigital\FilamentNestedResources;
 
-use Filament\PluginServiceProvider;
 use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class FilamentNestedResourcesServiceProvider extends PluginServiceProvider
+class FilamentNestedResourcesServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-nested-resources';
 
