@@ -72,10 +72,6 @@ abstract class NestedResource extends Resource
         };
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     public static function getMiddlewares(): string | array
     {
         return static::$middlewares;
@@ -85,42 +81,9 @@ abstract class NestedResource extends Resource
     /**
      * @param  array<mixed>  $params
      */
-    public static function getUrl(string $name = 'index', array $params = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
-=======
     //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
->>>>>>> 1f6734f (up)
     {
-=======
-=======
->>>>>>> 70d9acb (.)
-=======
->>>>>>> 7b662da (.)
-    //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
-    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
-=======
-=======
->>>>>>> b95efa9 (up)
-    public static function getMiddlewares(): string | array
-    {
-        return static::$middlewares;
-    }
-
-
-    /**
-     * @param  array<mixed>  $params
-     */
-    public static function getUrl(string $name = 'index', array $params = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
-<<<<<<< HEAD
->>>>>>> cf7f430 (.)
-=======
-=======
-    //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
-    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
->>>>>>> 1f6734f (up)
->>>>>>> b95efa9 (up)
-    {
->>>>>>> 1f6734f (up)
         $params=$parameters;
         if (! is_array($params)) {
             $params = [$params];
