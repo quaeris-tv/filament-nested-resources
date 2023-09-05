@@ -57,7 +57,14 @@ class ChildResourceLink extends TextColumn
         }
 
         $param = Str::camel(Str::singular($this->resourceClass::getParent()::getSlug()));
-
+        /*
+        dddx([
+            '$this->resourceClass'=>$this->resourceClass,  //SurveyPdfResource
+            '$baseParams'=>$baseParams, // []
+            'param'=>$param, // customer
+            'geyKey'=>$this->record->getKey(), //1
+        ]);
+        */
         return $this->resourceClass::getUrl(
             'index',
             [...$baseParams, $param => $this->record->getKey()]

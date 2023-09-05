@@ -273,7 +273,7 @@ trait NestedPage
     {
         return static::getResource()::form($form, $this->getParent());
     }
-
+    /* WIP
     protected function getTableRecordUrlUsing(): ?Closure
     {
         return function (Model $record): ?string {
@@ -316,4 +316,5 @@ trait NestedPage
             return null;
         };
     }
+    */
 }

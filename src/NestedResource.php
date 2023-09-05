@@ -51,13 +51,39 @@ abstract class NestedResource extends Resource
         return $query;
     }
 
+    public static function routes(\Filament\Panel $panel): void
+    {
+         $slug = static::getSlug();
+
+            $prefix = '';
+            $parents=static::getParentTree(static::getParent());
+
+            foreach ($parents as $parent) {
+                $prefix .= $parent->urlPart.'/{'.$parent->urlPlaceholder.'}/';
+            }
+
+            Route::name("$slug.")
+                ->prefix($prefix.$slug)
+                ->middleware(static::getMiddlewares())
+                ->group(function () use ($panel) {
+                    foreach (static::getPages() as $name => $page) {
+                        //Route::get($page['route'], $page['class'])->name($name);
+                        $page->registerRoute($panel)?->name($name);
+                    }
+                });
+    }
+
+
     public static function getRoutes(): Closure
     {
+        dddx('DEPRECATED ????');
         return function () {
             $slug = static::getSlug();
 
             $prefix = '';
-            foreach (static::getParentTree(static::getParent()) as $parent) {
+            $parents=static::getParentTree(static::getParent());
+            //dddx(['slug'=>$slug,'parents'=>$parents]);
+            foreach ($parents as $parent) {
                 $prefix .= $parent->urlPart.'/{'.$parent->urlPlaceholder.'}/';
             }
 
@@ -82,7 +108,7 @@ abstract class NestedResource extends Resource
      * @param  array<mixed>  $params
      */
     //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
-    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
+    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
     {
         $params=$parameters;
         if (! is_array($params)) {
@@ -104,8 +130,9 @@ abstract class NestedResource extends Resource
 
             $params[Str::singular($resource::getSlug())] = $childParams['record'];
         }
-
-        return parent::getUrl($name, [...$childParams, ...$params], $isAbsolute);
+        $url=parent::getUrl($name, [...$childParams, ...$params], $isAbsolute,$panel,$tenant);
+        //dddx(['name'=>$name,'$childParams'=>$childParams,'params'=>$params,'isAbsolute','panel'=>$panel,'tenant'=>$tenant,'url'=>$url]);
+        return $url;
     }
 
     /**
