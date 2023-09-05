@@ -6,6 +6,10 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1f6734f (up)
 =======
 
 >>>>>>> 1f6734f (up)

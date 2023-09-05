@@ -73,6 +73,7 @@ abstract class NestedResource extends Resource
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public static function getMiddlewares(): string | array
     {
         return static::$middlewares;
@@ -88,6 +89,11 @@ abstract class NestedResource extends Resource
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
 >>>>>>> 1f6734f (up)
     {
+=======
+    //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
+    {
+>>>>>>> 1f6734f (up)
         $params=$parameters;
         if (! is_array($params)) {
             $params = [$params];
