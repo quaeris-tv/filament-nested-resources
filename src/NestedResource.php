@@ -70,8 +70,10 @@ abstract class NestedResource extends Resource
         };
     }
 
-    public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+    //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?\Illuminate\Database\Eloquent\Model $tenant = null): string
     {
+        $params=$parameters;
         if (! is_array($params)) {
             $params = [$params];
         }
@@ -153,7 +155,7 @@ abstract class NestedResource extends Resource
         return $list;
     }
 
-    protected static function getNavigationGroup(): ?string
+    public static function getNavigationGroup(): ?string
     {
         if (static::getParentId()) {
             return static::getParent()::getRecordTitle(
