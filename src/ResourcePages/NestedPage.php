@@ -3,11 +3,11 @@
 namespace SevendaysDigital\FilamentNestedResources\ResourcePages;
 
 use Closure;
-use Filament\Pages\Actions\CreateAction;
-use Filament\Pages\Actions\DeleteAction;
-use Filament\Pages\Actions\EditAction as PageEditAction;
-use Filament\Pages\Actions\ViewAction;
-use Filament\Resources\Form;
+use Filament\Actions\CreateAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction as PageEditAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Form;
 use Filament\Resources\Pages\ViewRecord;
 use Filament\Tables\Actions\DeleteAction as TableDeleteAction;
 use Filament\Tables\Actions\EditAction;
@@ -63,7 +63,10 @@ trait NestedPage
         return $parameters;
     }
 
-    protected function getBreadcrumbs(): array
+    /**
+     * @return array<string>
+     */
+    public function getBreadcrumbsWIP(): array
     {
         $resource = static::getResource();
 
@@ -172,7 +175,7 @@ trait NestedPage
         }
     }
 
-    protected function configureCreateAction(CreateAction $action): void
+    protected function configureCreateAction(\Filament\Actions\CreateAction|\Filament\Tables\Actions\CreateAction $action): void
     {
         $resource = static::getResource();
 
@@ -266,7 +269,7 @@ trait NestedPage
         return $resource::getParent()::getModel()::find($this->getParentId());
     }
 
-    protected function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return static::getResource()::form($form, $this->getParent());
     }
