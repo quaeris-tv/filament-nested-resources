@@ -8,6 +8,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
 
@@ -30,6 +31,7 @@ abstract class NestedResource extends Resource
             ->afterLast('\\Models\\')
             ->camel();
     }
+
 
     public static function getParentId(): int|string|null
     {
@@ -111,10 +113,6 @@ abstract class NestedResource extends Resource
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
     {
         $params=$parameters;
-        if (! is_array($params)) {
-            $params = [$params];
-        }
-
         $list = static::getParentParametersForUrl(static::getParent(), $params);
 
         $params = [...$params, ...$list];
@@ -127,11 +125,21 @@ abstract class NestedResource extends Resource
             $controller = Route::current()->getController();
             /** @var resource $resource */
             $resource = $controller::getResource();
-
-            $params[Str::singular($resource::getSlug())] = $childParams['record'];
+            $slug=Str::singular($resource::getSlug());
+            $params[$slug] = $childParams['record'];
         }
-        $url=parent::getUrl($name, [...$childParams, ...$params], $isAbsolute,$panel,$tenant);
-        //dddx(['name'=>$name,'$childParams'=>$childParams,'params'=>$params,'isAbsolute','panel'=>$panel,'tenant'=>$tenant,'url'=>$url]);
+
+
+
+        $session_url_params=Session::get('url_params');
+        if(!is_array($session_url_params)){
+            $session_url_params=[];
+        }
+        $url_params=[...$childParams, ...$params, ...$session_url_params];
+        Session::put('url_params',$url_params);
+
+        $url=parent::getUrl($name, $url_params, $isAbsolute,$panel,$tenant);
+
         return $url;
     }
 
@@ -189,7 +197,7 @@ abstract class NestedResource extends Resource
             $singularSlug,
             $urlParameters[$singularSlug] ?? null
         );
-
+        //dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
         foreach ($list as $key => $value) {
             if ($value instanceof Model) {
                 $list[$key] = $value->getKey();
