@@ -32,7 +32,6 @@ abstract class NestedResource extends Resource
             ->camel();
     }
 
-
     public static function getParentId(): int|string|null
     {
         $parentId = Route::current()->parameter(static::getParentAccessor(), Route::current()->parameter('record'));
