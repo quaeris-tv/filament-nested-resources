@@ -38,6 +38,11 @@ trait NestedPage
      */
     abstract public static function getResource(): string;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public function bootNestedPage(): void
     {
         if (empty($this->urlParameters)) {
@@ -125,25 +130,17 @@ trait NestedPage
         /** @var NestedResource $resource */
         $resource = $this::getResource();
 
-        $parent = Str::camel(Str::afterLast($resource::getParent()::getModel(), '\\'));
+        $parentModelClass = $resource::getParent()::getModel();
+        $parentId = $this->getParentId();
+        $parentModel = $parentModelClass::find($parentId);
+
+        $parent = Str::camel(Str::afterLast($parentModelClass, '\\'));
 
         // Create the model.
-        // $model = $this->getModel()::make($data);
-        $model = $this->getModel()::create($data);
+        $model = $this->getModel()::make($data);
 
-        // try {
-        $model->{$parent}()->associate($this->getParentId());
-        // } catch (\Exception $e) {
-        /*
-        dd([
-        // 'message' => $e->getMessage(),
-        'model' => $model,
-        'parent' => $parent,
-        'parent_id' => $this->getParentId(),
-        // 'e' => $e,
-        ]);
-        */
-        // }
+        $related = $model->{$parent}()->associate($parentModel);
+        $related->save();
 
         return $model;
     }
