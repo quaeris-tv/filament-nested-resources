@@ -46,6 +46,13 @@ abstract class NestedResource extends Resource
         $query = parent::getEloquentQuery();
         $parentModel = static::getParent()::getModel();
         $key = (new $parentModel())->getKeyName();
+
+        $parentScope = 'of'.Str::studly(Str::afterLast(static::getParent()::getModel(), '\\'));
+
+        if ($query->hasNamedScope($parentScope)) {
+            return $query->{$parentScope}($parent ?? static::getParentId());
+        }
+
         $query->whereHas(
             static::getParentAccessor(),
             fn (Builder $builder) => $builder->where($key, '=', $parent ?? static::getParentId())
@@ -201,7 +208,7 @@ abstract class NestedResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        if (static::getParentId()) {
+        if (static::getParentId()) {// not work with morph
             return static::getParent()::getRecordTitle(
                 static::getParent()::getModel()::find(
                     static::getParentId()
