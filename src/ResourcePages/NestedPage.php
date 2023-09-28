@@ -73,7 +73,7 @@ trait NestedPage
     /**
      * @return array<string>
      */
-    public function getBreadcrumbsWIP(): array
+    public function getBreadcrumbs(): array
     {
         $resource = static::getResource();
 
