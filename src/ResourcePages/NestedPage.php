@@ -139,8 +139,24 @@ trait NestedPage
         // Create the model.
         $model = $this->getModel()::make($data);
 
+<<<<<<< HEAD
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
+=======
+        // try {
+        $model->{$parent}()->associate($this->getParentId());
+        // } catch (\Exception $e) {
+        /*
+        dd([
+        // 'message' => $e->getMessage(),
+        'model' => $model,
+        'parent' => $parent,
+        'parent_id' => $this->getParentId(),
+        // 'e' => $e,
+        ]);
+        */
+        // }
+>>>>>>> 6acad17 (up)
 
         return $model;
     }
