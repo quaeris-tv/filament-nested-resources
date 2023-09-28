@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SevendaysDigital\FilamentNestedResources;
 
-use Closure;
-use Illuminate\Support\Str;
-use Filament\Resources\Resource;
 use Filament\Resources\Pages\Page;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 abstract class NestedResource extends Resource
 {
@@ -18,7 +19,7 @@ abstract class NestedResource extends Resource
 
     protected static bool $shouldRegisterNavigationWhenInContext = true;
 
-    protected static string | array $middlewares = [];
+    protected static string|array $middlewares = [];
 
     /**
      * @return class-string<resource|NestedResource>
@@ -29,7 +30,8 @@ abstract class NestedResource extends Resource
     {
         return Str::of(static::getParent()::getModel())
             ->afterLast('\\Models\\')
-            ->camel();
+            ->camel()
+            ->toString();
     }
 
 
@@ -40,7 +42,7 @@ abstract class NestedResource extends Resource
         return $parentId instanceof Model ? $parentId->getKey() : $parentId;
     }
 
-    public static function getEloquentQuery(string|int|null $parent = null): Builder
+    public static function getEloquentQuery(string|int $parent = null): Builder
     {
         $query = parent::getEloquentQuery();
         $parentModel = static::getParent()::getModel();
@@ -55,64 +57,36 @@ abstract class NestedResource extends Resource
 
     public static function routes(\Filament\Panel $panel): void
     {
-         $slug = static::getSlug();
+        $slug = static::getSlug();
 
-            $prefix = '';
-            $parents=static::getParentTree(static::getParent());
+        $prefix = '';
+        $parents = static::getParentTree(static::getParent());
 
-            foreach ($parents as $parent) {
-                $prefix .= $parent->urlPart.'/{'.$parent->urlPlaceholder.'}/';
-            }
+        foreach ($parents as $parent) {
+            $prefix .= $parent->urlPart.'/{'.$parent->urlPlaceholder.'}/';
+        }
 
-            Route::name("$slug.")
-                ->prefix($prefix.$slug)
-                ->middleware(static::getMiddlewares())
-                ->group(function () use ($panel) {
-                    foreach (static::getPages() as $name => $page) {
-                        //Route::get($page['route'], $page['class'])->name($name);
-                        $page->registerRoute($panel)?->name($name);
-                    }
-                });
+        $res = Route::name("$slug.")
+            ->prefix($prefix.$slug)
+            ->middleware(static::getMiddlewares())
+            ->group(function () use ($panel) {
+                foreach (static::getPages() as $name => $page) {
+                    // Route::get($page['route'], $page['class'])->name($name);
+                    $page->registerRoute($panel)?->name($name);
+                }
+            });
     }
 
-
-    public static function getRoutes(): Closure
-    {
-        dddx('DEPRECATED ????');
-        return function () {
-            $slug = static::getSlug();
-
-            $prefix = '';
-            $parents=static::getParentTree(static::getParent());
-            //dddx(['slug'=>$slug,'parents'=>$parents]);
-            foreach ($parents as $parent) {
-                $prefix .= $parent->urlPart.'/{'.$parent->urlPlaceholder.'}/';
-            }
-
-            Route::name("$slug.")
-                ->prefix($prefix.$slug)
-                ->middleware(static::getMiddlewares())
-                ->group(function () {
-                    foreach (static::getPages() as $name => $page) {
-                        Route::get($page['route'], $page['class'])->name($name);
-                    }
-                });
-        };
-    }
-
-    public static function getMiddlewares(): string | array
+    public static function getMiddlewares(): string|array
     {
         return static::$middlewares;
     }
 
-
-    /**
-     * @param  array<mixed>  $params
-     */
-    //public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
-    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
+    // public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, string $panel = null, Model $tenant = null): string
     {
-        $params=$parameters;
+        $params = $parameters;
+
         $list = static::getParentParametersForUrl(static::getParent(), $params);
 
         $params = [...$params, ...$list];
@@ -125,26 +99,43 @@ abstract class NestedResource extends Resource
             $controller = Route::current()->getController();
             /** @var resource $resource */
             $resource = $controller::getResource();
-            $slug=Str::singular($resource::getSlug());
+            $slug = Str::singular($resource::getSlug());
             $params[$slug] = $childParams['record'];
         }
 
-
-
-        $session_url_params=Session::get('url_params');
-        if(!is_array($session_url_params)){
-            $session_url_params=[];
+        $session_key = basename(static::class).'-'.$name.'-params';
+        $session_url_params = Session::get($session_key);
+        if (! \is_array($session_url_params)) {
+            $session_url_params = [];
         }
-        $url_params=[...$childParams, ...$params, ...$session_url_params];
-        Session::put('url_params',$url_params);
+        // $url_params = [...$session_url_params, ...$childParams, ...$params];
+        $url_params = [...$childParams, ...$params];
+        foreach ($url_params as $key => $value) {
+            if (null === $value && isset($session_url_params[$key])) {
+                $url_params[$key] = $session_url_params[$key];
+            }
+        }
 
-        $url=parent::getUrl($name, $url_params, $isAbsolute,$panel,$tenant);
+        Session::put($session_key, $url_params);
+        try {
+            $url = parent::getUrl($name, $url_params, $isAbsolute, $panel, $tenant);
+        } catch (\Exception $e) {
+            dd([
+                'e' => $e->getMessage(),
+                'name' => $name,
+                'url_params' => $url_params,
+                'session_url_params' => $session_url_params,
+                'childParams' => $childParams,
+                'params' => $params,
+            ]);
+        }
 
-        return $url;
+                return $url;
     }
 
     /**
-     * @param class-string<Resource|NestedResource> $parent
+     * @param class-string<resource|NestedResource> $parent
+     *
      * @return NestedEntry[]
      */
     public static function getParentTree(string $parent, array $urlParams = []): array
@@ -152,8 +143,8 @@ abstract class NestedResource extends Resource
         $singularSlug = Str::camel(Str::singular($parent::getSlug()));
 
         $list = [];
-        //if (new $parent() instanceof NestedResource) {
-        if(method_exists($parent, 'getParent')) {
+        // if (new $parent() instanceof NestedResource) {
+        if (method_exists($parent, 'getParent')) {
             $list = [...$list, ...static::getParentTree($parent::getParent(), $urlParams)];
         }
 
@@ -181,23 +172,22 @@ abstract class NestedResource extends Resource
     }
 
     /**
-     * @param class-string<Resource|NestedResource> $parent
+     * @param class-string<resource|NestedResource> $parent
      */
     public static function getParentParametersForUrl(string $parent, array $urlParameters = []): array
     {
-
         $list = [];
 
         $singularSlug = Str::camel(Str::singular($parent::getSlug()));
-        //if (new $parent() instanceof NestedResource) {
-        if(method_exists($parent, 'getParent')) {
+        // if (new $parent() instanceof NestedResource) {
+        if (method_exists($parent, 'getParent')) {
             $list = static::getParentParametersForUrl($parent::getParent(), $urlParameters);
         }
         $list[$singularSlug] = Route::current()?->parameter(
             $singularSlug,
             $urlParameters[$singularSlug] ?? null
         );
-        //dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
+        // dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
         foreach ($list as $key => $value) {
             if ($value instanceof Model) {
                 $list[$key] = $value->getKey();
