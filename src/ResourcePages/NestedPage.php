@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace SevendaysDigital\FilamentNestedResources\ResourcePages;
 
 use Closure;
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use SevendaysDigital\FilamentNestedResources\NestedResource;
 
-/*
+/**
  * @extends \Filament\Resources\Pages\EditRecord
  * @extends \Filament\Resources\Pages\ViewRecord
  * @extends \Filament\Resources\Pages\ListRecords
@@ -126,9 +128,20 @@ trait NestedPage
         $parent = Str::camel(Str::afterLast($resource::getParent()::getModel(), '\\'));
 
         // Create the model.
-        $model = $this->getModel()::make($data);
-        $model->{$parent}()->associate($this->getParentId());
-        $model->save();
+        // $model = $this->getModel()::make($data);
+        $model = $this->getModel()::create($data);
+
+        try {
+            $model->{$parent}()->associate($this->getParentId());
+        } catch (\Exception $e) {
+            dd([
+                'message' => $e->getMessage(),
+                'model' => $model,
+                'parent' => $parent,
+                'parent_id' => $this->getParentId(),
+                'e' => $e,
+            ]);
+        }
 
         return $model;
     }
@@ -153,7 +166,7 @@ trait NestedPage
             if ($resource::hasPage('edit')) {
                 $action->url(fn (Model $record): string => $resource::getUrl(
                     'edit',
-                    [...$this->urlParameters, 'record' => $record]
+                    [...$this->urlParameters, 'record' => $record->getKey()]
                 ));
             }
         } else {
@@ -175,7 +188,7 @@ trait NestedPage
         }
     }
 
-    protected function configureCreateAction(\Filament\Actions\CreateAction|\Filament\Tables\Actions\CreateAction $action): void
+    protected function configureCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): void
     {
         $resource = static::getResource();
 
@@ -193,12 +206,13 @@ trait NestedPage
     protected function configureDeleteAction(DeleteAction|TableDeleteAction $action): void
     {
         $resource = static::getResource();
-
+        /*
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())
             ->recordTitle($this->getRecordTitle())
             ->successRedirectUrl($resource::getUrl('index', $this->urlParameters));
+        */
     }
 
     protected function configureViewAction(ViewAction|TableViewAction $action): void
@@ -255,7 +269,7 @@ trait NestedPage
             return $this->urlParameters[$parent]->getKey();
         }
 
-        if (is_array($this->urlParameters[$parent]) && isset($this->urlParameters[$parent]['id'])) {
+        if (\is_array($this->urlParameters[$parent]) && isset($this->urlParameters[$parent]['id'])) {
             return $this->urlParameters[$parent]['id'];
         }
 
