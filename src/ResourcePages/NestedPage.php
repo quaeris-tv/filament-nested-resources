@@ -38,7 +38,7 @@ trait NestedPage
      */
     abstract public static function getResource(): string;
 
-    public static function shouldRegisterNavigation(): bool
+    public static function shouldRegisterNavigation(array $parameters = []): bool
     {
         return false;
     }
