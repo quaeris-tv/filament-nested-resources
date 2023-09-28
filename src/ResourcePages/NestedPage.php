@@ -131,17 +131,19 @@ trait NestedPage
         // $model = $this->getModel()::make($data);
         $model = $this->getModel()::create($data);
 
-        try {
-            $model->{$parent}()->associate($this->getParentId());
-        } catch (\Exception $e) {
-            dd([
-                'message' => $e->getMessage(),
-                'model' => $model,
-                'parent' => $parent,
-                'parent_id' => $this->getParentId(),
-                'e' => $e,
-            ]);
-        }
+        // try {
+        $model->{$parent}()->associate($this->getParentId());
+        // } catch (\Exception $e) {
+        /*
+        dd([
+        // 'message' => $e->getMessage(),
+        'model' => $model,
+        'parent' => $parent,
+        'parent_id' => $this->getParentId(),
+        // 'e' => $e,
+        ]);
+        */
+        // }
 
         return $model;
     }
@@ -164,10 +166,15 @@ trait NestedPage
                 ->form(fn (): array => $this->getEditFormSchema());
 
             if ($resource::hasPage('edit')) {
-                $action->url(fn (Model $record): string => $resource::getUrl(
-                    'edit',
-                    [...$this->urlParameters, 'record' => $record->getKey()]
-                ));
+                $action->url(
+                    function (Model $record) use ($resource): string {
+                        $params = $this->urlParameters;
+                        $params['record'] = $record;
+                        $url = $resource::getUrl('edit', $params);
+
+                        return $url;
+                    }
+                );
             }
         } else {
             $action
