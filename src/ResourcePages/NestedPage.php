@@ -206,7 +206,7 @@ trait NestedPage
     protected function configureDeleteAction(DeleteAction|TableDeleteAction $action): void
     {
         $resource = static::getResource();
-        /*-- WIP
+        /*-- WIP ..
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())
