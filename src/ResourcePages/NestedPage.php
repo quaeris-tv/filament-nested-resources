@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> 73c8e5b (first)
 namespace SevendaysDigital\FilamentNestedResources\ResourcePages;
 
 use Closure;
@@ -20,7 +23,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use SevendaysDigital\FilamentNestedResources\NestedResource;
 
+<<<<<<< HEAD
 /**
+=======
+/*
+>>>>>>> 73c8e5b (first)
  * @extends \Filament\Resources\Pages\EditRecord
  * @extends \Filament\Resources\Pages\ViewRecord
  * @extends \Filament\Resources\Pages\ListRecords
@@ -38,11 +45,14 @@ trait NestedPage
      */
     abstract public static function getResource(): string;
 
+<<<<<<< HEAD
     public static function shouldRegisterNavigation(array $parameters = []): bool
     {
         return false;
     }
 
+=======
+>>>>>>> 73c8e5b (first)
     public function bootNestedPage(): void
     {
         if (empty($this->urlParameters)) {
@@ -73,7 +83,11 @@ trait NestedPage
     /**
      * @return array<string>
      */
+<<<<<<< HEAD
     public function getBreadcrumbs(): array
+=======
+    public function getBreadcrumbsWIP(): array
+>>>>>>> 73c8e5b (first)
     {
         $resource = static::getResource();
 
@@ -130,6 +144,7 @@ trait NestedPage
         /** @var NestedResource $resource */
         $resource = $this::getResource();
 
+<<<<<<< HEAD
         $parentModelClass = $resource::getParent()::getModel();
         $parentId = $this->getParentId();
         $parentModel = $parentModelClass::find($parentId);
@@ -141,6 +156,14 @@ trait NestedPage
 
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
+=======
+        $parent = Str::camel(Str::afterLast($resource::getParent()::getModel(), '\\'));
+
+        // Create the model.
+        $model = $this->getModel()::make($data);
+        $model->{$parent}()->associate($this->getParentId());
+        $model->save();
+>>>>>>> 73c8e5b (first)
 
         return $model;
     }
@@ -163,6 +186,7 @@ trait NestedPage
                 ->form(fn (): array => $this->getEditFormSchema());
 
             if ($resource::hasPage('edit')) {
+<<<<<<< HEAD
                 $action->url(
                     function (Model $record) use ($resource): string {
                         $params = $this->urlParameters;
@@ -172,6 +196,12 @@ trait NestedPage
                         return $url;
                     }
                 );
+=======
+                $action->url(fn (Model $record): string => $resource::getUrl(
+                    'edit',
+                    [...$this->urlParameters, 'record' => $record]
+                ));
+>>>>>>> 73c8e5b (first)
             }
         } else {
             $action
@@ -192,7 +222,11 @@ trait NestedPage
         }
     }
 
+<<<<<<< HEAD
     protected function configureCreateAction(CreateAction|\Filament\Tables\Actions\CreateAction $action): void
+=======
+    protected function configureCreateAction(\Filament\Actions\CreateAction|\Filament\Tables\Actions\CreateAction $action): void
+>>>>>>> 73c8e5b (first)
     {
         $resource = static::getResource();
 
@@ -210,13 +244,20 @@ trait NestedPage
     protected function configureDeleteAction(DeleteAction|TableDeleteAction $action): void
     {
         $resource = static::getResource();
+<<<<<<< HEAD
         /*-- WIP ..
+=======
+
+>>>>>>> 73c8e5b (first)
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())
             ->recordTitle($this->getRecordTitle())
             ->successRedirectUrl($resource::getUrl('index', $this->urlParameters));
+<<<<<<< HEAD
         */
+=======
+>>>>>>> 73c8e5b (first)
     }
 
     protected function configureViewAction(ViewAction|TableViewAction $action): void
@@ -273,7 +314,11 @@ trait NestedPage
             return $this->urlParameters[$parent]->getKey();
         }
 
+<<<<<<< HEAD
         if (\is_array($this->urlParameters[$parent]) && isset($this->urlParameters[$parent]['id'])) {
+=======
+        if (is_array($this->urlParameters[$parent]) && isset($this->urlParameters[$parent]['id'])) {
+>>>>>>> 73c8e5b (first)
             return $this->urlParameters[$parent]['id'];
         }
 
