@@ -1,7 +1,10 @@
 <?php
 
+<<<<<<< HEAD
 declare(strict_types=1);
 
+=======
+>>>>>>> 73c8e5b (first)
 namespace SevendaysDigital\FilamentNestedResources\Columns;
 
 use Filament\Tables\Columns\TextColumn;
@@ -16,7 +19,11 @@ class ChildResourceLink extends TextColumn
     private string $resourceClass;
 
     /**
+<<<<<<< HEAD
      * @param class-string<NestedResource> $name
+=======
+     * @param  class-string<NestedResource>  $name
+>>>>>>> 73c8e5b (first)
      */
     public static function make(string $name): static
     {
@@ -48,7 +55,11 @@ class ChildResourceLink extends TextColumn
     {
         $count = $this->getCount();
 
+<<<<<<< HEAD
         return $count.' '.(1 === $count ? $this->getChildLabelSingular() : $this->getChildLabelPlural());
+=======
+        return $count.' '.($count === 1 ? $this->getChildLabelSingular() : $this->getChildLabelPlural());
+>>>>>>> 73c8e5b (first)
     }
 
     public function getUrl(): ?string
@@ -59,12 +70,27 @@ class ChildResourceLink extends TextColumn
         }
 
         $param = Str::camel(Str::singular($this->resourceClass::getParent()::getSlug()));
+<<<<<<< HEAD
 
         $params = $baseParams;
         $params[$param] = $this->record->getKey();
         $url = $this->resourceClass::getUrl('index', $params);
 
         return $url;
+=======
+        /*
+        dddx([
+            '$this->resourceClass'=>$this->resourceClass,  //SurveyPdfResource
+            '$baseParams'=>$baseParams, // []
+            'param'=>$param, // customer
+            'geyKey'=>$this->record->getKey(), //1
+        ]);
+        */
+        return $this->resourceClass::getUrl(
+            'index',
+            [...$baseParams, $param => $this->record->getKey()]
+        );
+>>>>>>> 73c8e5b (first)
     }
 
     private function getCount(): int
