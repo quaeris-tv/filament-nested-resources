@@ -137,10 +137,27 @@ trait NestedPage
         $parent = Str::camel(Str::afterLast($parentModelClass, '\\'));
 
         // Create the model.
+<<<<<<< HEAD
         $model = $this->getModel()::make($data);
 
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
+=======
+        // $model = $this->getModel()::make($data);
+        $model = $this->getModel()::create($data);
+
+        try {
+            $model->{$parent}()->associate($this->getParentId());
+        } catch (\Exception $e) {
+            dd([
+                'message' => $e->getMessage(),
+                'model' => $model,
+                'parent' => $parent,
+                'parent_id' => $this->getParentId(),
+                'e' => $e,
+            ]);
+        }
+>>>>>>> fb235c1 (up)
 
         return $model;
     }
@@ -163,6 +180,7 @@ trait NestedPage
                 ->form(fn (): array => $this->getEditFormSchema());
 
             if ($resource::hasPage('edit')) {
+<<<<<<< HEAD
                 $action->url(
                     function (Model $record) use ($resource): string {
                         $params = $this->urlParameters;
@@ -172,6 +190,12 @@ trait NestedPage
                         return $url;
                     }
                 );
+=======
+                $action->url(fn (Model $record): string => $resource::getUrl(
+                    'edit',
+                    [...$this->urlParameters, 'record' => $record->getKey()]
+                ));
+>>>>>>> fb235c1 (up)
             }
         } else {
             $action
@@ -210,7 +234,11 @@ trait NestedPage
     protected function configureDeleteAction(DeleteAction|TableDeleteAction $action): void
     {
         $resource = static::getResource();
+<<<<<<< HEAD
         /*-- WIP ..
+=======
+        /*
+>>>>>>> fb235c1 (up)
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())
