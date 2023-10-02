@@ -236,6 +236,7 @@ trait NestedPage
         $resource = static::getResource();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         /*-- WIP ..
 =======
         /*
@@ -243,6 +244,9 @@ trait NestedPage
 =======
         /*-- WIP
 >>>>>>> 12604a3 (.)
+=======
+        /*-- WIP ..
+>>>>>>> 7d9945e (.)
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())
