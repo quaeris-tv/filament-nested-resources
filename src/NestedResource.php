@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace SevendaysDigital\FilamentNestedResources;
 
 use Filament\Resources\Pages\Page;
+<<<<<<< HEAD
 use Filament\Resources\Resource;
+=======
+use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
+>>>>>>> 38a7003 (up)
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
@@ -92,8 +98,12 @@ abstract class NestedResource extends Resource
     // public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, string $panel = null, Model $tenant = null): string
     {
+<<<<<<< HEAD
         $params = $parameters;
 
+=======
+        $params=$parameters;
+>>>>>>> 38a7003 (up)
         $list = static::getParentParametersForUrl(static::getParent(), $params);
 
         $params = [...$params, ...$list];
@@ -106,6 +116,7 @@ abstract class NestedResource extends Resource
             $controller = Route::current()->getController();
             /** @var resource $resource */
             $resource = $controller::getResource();
+<<<<<<< HEAD
             $slug = Str::singular($resource::getSlug());
             $params[$slug] = $childParams['record'];
         }
@@ -139,6 +150,22 @@ abstract class NestedResource extends Resource
             */
             $url = '#';
         }
+=======
+            $slug=Str::singular($resource::getSlug());
+            $params[$slug] = $childParams['record'];
+        }
+
+
+
+        $session_url_params=Session::get('url_params');
+        if(!is_array($session_url_params)){
+            $session_url_params=[];
+        }
+        $url_params=[...$childParams, ...$params, ...$session_url_params];
+        Session::put('url_params',$url_params);
+
+        $url=parent::getUrl($name, $url_params, $isAbsolute,$panel,$tenant);
+>>>>>>> 38a7003 (up)
 
         return $url;
     }
@@ -197,7 +224,11 @@ abstract class NestedResource extends Resource
             $singularSlug,
             $urlParameters[$singularSlug] ?? null
         );
+<<<<<<< HEAD
         // dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
+=======
+        //dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
+>>>>>>> 38a7003 (up)
         foreach ($list as $key => $value) {
             if ($value instanceof Model) {
                 $list[$key] = $value->getKey();
