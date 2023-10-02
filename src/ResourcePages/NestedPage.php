@@ -146,6 +146,7 @@ trait NestedPage
         // $model = $this->getModel()::make($data);
         $model = $this->getModel()::create($data);
 
+<<<<<<< HEAD
         try {
             $model->{$parent}()->associate($this->getParentId());
         } catch (\Exception $e) {
@@ -158,6 +159,21 @@ trait NestedPage
             ]);
         }
 >>>>>>> fb235c1 (up)
+=======
+        // try {
+        $model->{$parent}()->associate($this->getParentId());
+        // } catch (\Exception $e) {
+        /*
+        dd([
+        // 'message' => $e->getMessage(),
+        'model' => $model,
+        'parent' => $parent,
+        'parent_id' => $this->getParentId(),
+        // 'e' => $e,
+        ]);
+        */
+        // }
+>>>>>>> dba62a9 (up)
 
         return $model;
     }
@@ -181,6 +197,9 @@ trait NestedPage
 
             if ($resource::hasPage('edit')) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dba62a9 (up)
                 $action->url(
                     function (Model $record) use ($resource): string {
                         $params = $this->urlParameters;
@@ -190,12 +209,15 @@ trait NestedPage
                         return $url;
                     }
                 );
+<<<<<<< HEAD
 =======
                 $action->url(fn (Model $record): string => $resource::getUrl(
                     'edit',
                     [...$this->urlParameters, 'record' => $record->getKey()]
                 ));
 >>>>>>> fb235c1 (up)
+=======
+>>>>>>> dba62a9 (up)
             }
         } else {
             $action
