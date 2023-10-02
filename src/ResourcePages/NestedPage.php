@@ -38,7 +38,11 @@ trait NestedPage
      */
     abstract public static function getResource(): string;
 
+<<<<<<< HEAD
     public static function shouldRegisterNavigation(array $parameters = []): bool
+=======
+    public static function shouldRegisterNavigation(): bool
+>>>>>>> d523c65 (up)
     {
         return false;
     }
@@ -138,6 +142,7 @@ trait NestedPage
 
         // Create the model.
 <<<<<<< HEAD
+<<<<<<< HEAD
         $model = $this->getModel()::make($data);
 
         $related = $model->{$parent}()->associate($parentModel);
@@ -174,6 +179,12 @@ trait NestedPage
         */
         // }
 >>>>>>> dba62a9 (up)
+=======
+        $model = $this->getModel()::make($data);
+
+        $related = $model->{$parent}()->associate($parentModel);
+        $related->save();
+>>>>>>> d523c65 (up)
 
         return $model;
     }
