@@ -149,9 +149,11 @@ trait NestedPage
 <<<<<<< HEAD
         $model = $this->getModel()::make($data);
 
+<<<<<<< HEAD
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
 =======
+<<<<<<< HEAD
         // $model = $this->getModel()::make($data);
         $model = $this->getModel()::create($data);
 
@@ -169,6 +171,8 @@ trait NestedPage
         }
 >>>>>>> fb235c1 (up)
 =======
+=======
+>>>>>>> 618e92d (up)
         // try {
         $model->{$parent}()->associate($this->getParentId());
         // } catch (\Exception $e) {
@@ -182,6 +186,7 @@ trait NestedPage
         ]);
         */
         // }
+<<<<<<< HEAD
 >>>>>>> dba62a9 (up)
 =======
         $model = $this->getModel()::make($data);
@@ -189,6 +194,9 @@ trait NestedPage
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
 >>>>>>> d523c65 (up)
+=======
+>>>>>>> 6acad17 (up)
+>>>>>>> 618e92d (up)
 
         return $model;
     }
