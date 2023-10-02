@@ -38,15 +38,7 @@ trait NestedPage
      */
     abstract public static function getResource(): string;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     public static function shouldRegisterNavigation(array $parameters = []): bool
-=======
-    public static function shouldRegisterNavigation(): bool
->>>>>>> d523c65 (up)
-=======
-    public static function shouldRegisterNavigation(array $parameters = []): bool
->>>>>>> 0b3b71b (up)
     {
         return false;
     }
@@ -145,60 +137,10 @@ trait NestedPage
         $parent = Str::camel(Str::afterLast($parentModelClass, '\\'));
 
         // Create the model.
-<<<<<<< HEAD
-<<<<<<< HEAD
         $model = $this->getModel()::make($data);
 
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-        // $model = $this->getModel()::make($data);
-        $model = $this->getModel()::create($data);
-
-<<<<<<< HEAD
-        try {
-            $model->{$parent}()->associate($this->getParentId());
-        } catch (\Exception $e) {
-            dd([
-                'message' => $e->getMessage(),
-                'model' => $model,
-                'parent' => $parent,
-                'parent_id' => $this->getParentId(),
-                'e' => $e,
-            ]);
-        }
->>>>>>> fb235c1 (up)
-=======
-=======
->>>>>>> 618e92d (up)
-        // try {
-        $model->{$parent}()->associate($this->getParentId());
-        // } catch (\Exception $e) {
-        /*
-        dd([
-        // 'message' => $e->getMessage(),
-        'model' => $model,
-        'parent' => $parent,
-        'parent_id' => $this->getParentId(),
-        // 'e' => $e,
-        ]);
-        */
-        // }
-<<<<<<< HEAD
->>>>>>> dba62a9 (up)
-=======
-        $model = $this->getModel()::make($data);
-
-        $related = $model->{$parent}()->associate($parentModel);
-        $related->save();
->>>>>>> d523c65 (up)
-=======
->>>>>>> 6acad17 (up)
->>>>>>> 618e92d (up)
-=======
->>>>>>> dbaab8c (up)
 
         return $model;
     }
@@ -221,10 +163,6 @@ trait NestedPage
                 ->form(fn (): array => $this->getEditFormSchema());
 
             if ($resource::hasPage('edit')) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> dba62a9 (up)
                 $action->url(
                     function (Model $record) use ($resource): string {
                         $params = $this->urlParameters;
@@ -234,15 +172,6 @@ trait NestedPage
                         return $url;
                     }
                 );
-<<<<<<< HEAD
-=======
-                $action->url(fn (Model $record): string => $resource::getUrl(
-                    'edit',
-                    [...$this->urlParameters, 'record' => $record->getKey()]
-                ));
->>>>>>> fb235c1 (up)
-=======
->>>>>>> dba62a9 (up)
             }
         } else {
             $action
@@ -281,19 +210,7 @@ trait NestedPage
     protected function configureDeleteAction(DeleteAction|TableDeleteAction $action): void
     {
         $resource = static::getResource();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         /*-- WIP ..
-=======
-        /*
->>>>>>> fb235c1 (up)
-=======
-        /*-- WIP
->>>>>>> 12604a3 (.)
-=======
-        /*-- WIP ..
->>>>>>> 7d9945e (.)
         $action
             ->authorize($resource::canDelete($this->getRecord()))
             ->record($this->getRecord())

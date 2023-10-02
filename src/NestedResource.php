@@ -5,17 +5,7 @@ declare(strict_types=1);
 namespace SevendaysDigital\FilamentNestedResources;
 
 use Filament\Resources\Pages\Page;
-<<<<<<< HEAD
-<<<<<<< HEAD
 use Filament\Resources\Resource;
-=======
-use Illuminate\Support\Facades\Route;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Session;
->>>>>>> 38a7003 (up)
-=======
-use Filament\Resources\Resource;
->>>>>>> dba62a9 (up)
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Exceptions\UrlGenerationException;
@@ -102,17 +92,8 @@ abstract class NestedResource extends Resource
     // public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, string $panel = null, Model $tenant = null): string
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
         $params = $parameters;
 
-=======
-        $params=$parameters;
->>>>>>> 38a7003 (up)
-=======
-        $params = $parameters;
-
->>>>>>> dba62a9 (up)
         $list = static::getParentParametersForUrl(static::getParent(), $params);
 
         $params = [...$params, ...$list];
@@ -125,8 +106,6 @@ abstract class NestedResource extends Resource
             $controller = Route::current()->getController();
             /** @var resource $resource */
             $resource = $controller::getResource();
-<<<<<<< HEAD
-<<<<<<< HEAD
             $slug = Str::singular($resource::getSlug());
             $params[$slug] = $childParams['record'];
         }
@@ -149,15 +128,6 @@ abstract class NestedResource extends Resource
             $url = parent::getUrl($name, $url_params, $isAbsolute, $panel, $tenant);
         } catch (\Exception $e) {
             /*
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 6acad17 (up)
->>>>>>> 618e92d (up)
-=======
->>>>>>> dbaab8c (up)
             dd([
                 'e' => $e->getMessage(),
                 'name' => $name,
@@ -169,49 +139,6 @@ abstract class NestedResource extends Resource
             */
             $url = '#';
         }
-=======
-            $slug=Str::singular($resource::getSlug());
-=======
-            $slug = Str::singular($resource::getSlug());
->>>>>>> dba62a9 (up)
-            $params[$slug] = $childParams['record'];
-        }
-
-        $session_key = basename(static::class).'-'.$name.'-params';
-        $session_url_params = Session::get($session_key);
-        if (! \is_array($session_url_params)) {
-            $session_url_params = [];
-        }
-        // $url_params = [...$session_url_params, ...$childParams, ...$params];
-        $url_params = [...$childParams, ...$params];
-        foreach ($url_params as $key => $value) {
-            if (null === $value && isset($session_url_params[$key])) {
-                $url_params[$key] = $session_url_params[$key];
-            }
-        }
-
-<<<<<<< HEAD
-        $url=parent::getUrl($name, $url_params, $isAbsolute,$panel,$tenant);
->>>>>>> 38a7003 (up)
-=======
-        Session::put($session_key, $url_params);
-        try {
-            $url = parent::getUrl($name, $url_params, $isAbsolute, $panel, $tenant);
-        } catch (\Exception $e) {
-=======
->>>>>>> 156bbb8 (up)
-            dd([
-                'e' => $e->getMessage(),
-                'name' => $name,
-                'url_params' => $url_params,
-                'session_url_params' => $session_url_params,
-                'childParams' => $childParams,
-                'params' => $params,
-            ]);
-            */
-            $url = '#';
-        }
->>>>>>> dba62a9 (up)
 
         return $url;
     }
@@ -270,15 +197,7 @@ abstract class NestedResource extends Resource
             $singularSlug,
             $urlParameters[$singularSlug] ?? null
         );
-<<<<<<< HEAD
-<<<<<<< HEAD
         // dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
-=======
-        //dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
->>>>>>> 38a7003 (up)
-=======
-        // dddx(['singularSlug'=>$singularSlug,'r'=>Route::current()]);
->>>>>>> dba62a9 (up)
         foreach ($list as $key => $value) {
             if ($value instanceof Model) {
                 $list[$key] = $value->getKey();
