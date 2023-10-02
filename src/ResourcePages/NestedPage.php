@@ -149,9 +149,9 @@ trait NestedPage
 <<<<<<< HEAD
         $model = $this->getModel()::make($data);
 
-<<<<<<< HEAD
         $related = $model->{$parent}()->associate($parentModel);
         $related->save();
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
         // $model = $this->getModel()::make($data);
@@ -197,6 +197,8 @@ trait NestedPage
 =======
 >>>>>>> 6acad17 (up)
 >>>>>>> 618e92d (up)
+=======
+>>>>>>> dbaab8c (up)
 
         return $model;
     }
