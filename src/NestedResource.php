@@ -148,8 +148,14 @@ abstract class NestedResource extends Resource
         try {
             $url = parent::getUrl($name, $url_params, $isAbsolute, $panel, $tenant);
         } catch (\Exception $e) {
+<<<<<<< HEAD
             /*
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 6acad17 (up)
+>>>>>>> 618e92d (up)
             dd([
                 'e' => $e->getMessage(),
                 'name' => $name,
@@ -158,8 +164,11 @@ abstract class NestedResource extends Resource
                 'childParams' => $childParams,
                 'params' => $params,
             ]);
+<<<<<<< HEAD
             */
             $url = '#';
+=======
+>>>>>>> 6acad17 (up)
         }
 =======
             $slug=Str::singular($resource::getSlug());
@@ -205,7 +214,7 @@ abstract class NestedResource extends Resource
         }
 >>>>>>> dba62a9 (up)
 
-        return $url;
+                return $url;
     }
 
     /**
