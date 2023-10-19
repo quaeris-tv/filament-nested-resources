@@ -34,7 +34,6 @@ abstract class NestedResource extends Resource
             ->toString();
     }
 
-
     public static function getParentId(): int|string|null
     {
         $parentId = Route::current()->parameter(static::getParentAccessor(), Route::current()->parameter('record'));
@@ -136,7 +135,7 @@ abstract class NestedResource extends Resource
                 'childParams' => $childParams,
                 'params' => $params,
             ]);
-            */
+            // */
             $url = '#';
         }
 
@@ -224,7 +223,10 @@ abstract class NestedResource extends Resource
     {
         if (static::$shouldRegisterNavigationWhenInContext) {
             try {
-                static::getUrl('index');
+                $url = static::getUrl('index');
+                if ('#' === $url) {
+                    return false;
+                }
 
                 return true;
             } catch (UrlGenerationException) {
