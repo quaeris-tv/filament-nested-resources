@@ -11,7 +11,7 @@ class NestedEntry
     public function __construct(
         public string $urlPlaceholder,
         public string $urlPart,
-        /** @var class-string<resource|NestedResource> $resource */
+        /** @var class-string<Resource|NestedResource> $resource */
         public string $resource,
         public string $label,
         public null|string|int $id,
