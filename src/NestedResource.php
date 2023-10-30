@@ -117,7 +117,7 @@ abstract class NestedResource extends Resource
         // $url_params = [...$session_url_params, ...$childParams, ...$params];
         $url_params = [...$childParams, ...$params];
         foreach ($url_params as $key => $value) {
-            if (null === $value && isset($session_url_params[$key])) {
+            if ($value === null && isset($session_url_params[$key])) {
                 $url_params[$key] = $session_url_params[$key];
             }
         }
@@ -143,8 +143,7 @@ abstract class NestedResource extends Resource
     }
 
     /**
-     * @param class-string<resource|NestedResource> $parent
-     *
+     * @param  class-string<resource|NestedResource>  $parent
      * @return NestedEntry[]
      */
     public static function getParentTree(string $parent, array $urlParams = []): array
@@ -181,7 +180,7 @@ abstract class NestedResource extends Resource
     }
 
     /**
-     * @param class-string<resource|NestedResource> $parent
+     * @param  class-string<resource|NestedResource>  $parent
      */
     public static function getParentParametersForUrl(string $parent, array $urlParameters = []): array
     {
@@ -224,7 +223,7 @@ abstract class NestedResource extends Resource
         if (static::$shouldRegisterNavigationWhenInContext) {
             try {
                 $url = static::getUrl('index');
-                if ('#' === $url) {
+                if ($url === '#') {
                     return false;
                 }
 

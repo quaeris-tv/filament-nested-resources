@@ -4,14 +4,13 @@ namespace SevendaysDigital\FilamentNestedResources;
 
 use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
-use SevendaysDigital\FilamentNestedResources\NestedResource;
 
 class NestedEntry
 {
     public function __construct(
         public string $urlPlaceholder,
         public string $urlPart,
-        /** @var class-string<Resource|NestedResource> $resource */
+        /** @var class-string<resource|NestedResource> $resource */
         public string $resource,
         public string $label,
         public null|string|int $id,
