@@ -45,7 +45,7 @@ abstract class NestedResource extends Resource
     {
         $query = parent::getEloquentQuery();
         $parentModel = static::getParent()::getModel();
-        $key = (new $parentModel)->getKeyName();
+        $key = (new $parentModel())->getKeyName();
 
         $parentScope = 'of'.Str::studly(Str::afterLast(static::getParent()::getModel(), '\\'));
 
