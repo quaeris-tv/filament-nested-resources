@@ -56,6 +56,57 @@ public static function table(Table $table): Table
 }
 ```
 
+### Many To Many Relationships
+
+If you are using a many to many relationship, then you must write the inverse relationship inside your child model,
+and then a special scope to retrieve it's parent.
+
+Example with MorphToMany relation:
+
+```php
+
+/* Category.php  (parent) */
+
+public function products(): MorphToMany
+{
+    $pivot_class = ProductMorph::class;
+    $pivot = app($pivot_class);
+    $pivot_table = $pivot->getTable();
+    $pivot_fields = $pivot->getFillable();
+
+
+    return $this->morphToMany(Product::class, 'model', $pivot_table)
+        ->using($pivot_class)
+        ->withPivot($pivot_fields)
+        ->withTimestamps();
+}
+
+/* Product.php (child) */
+
+//inverse relation
+public function categories(): MorphToMany
+{
+    $pivot_class = ProductMorph::class;
+    $pivot = app($pivot_class);
+    $pivot_table = $pivot->getTable();
+    $pivot_fields = $pivot->getFillable();
+
+
+    return $this->morphedByMany(Category::class, 'model', $pivot_table)
+        ->using($pivot_class)
+        ->withPivot($pivot_fields)
+        ->withTimestamps();
+}
+
+// This scope is very important to retreive the parent model 
+public function scopeOfCategory($query,$parent)
+{
+    return $query->whereHas('categories', function ($query) use($parent) {
+        $query->where('categories.id', $parent);
+    });
+}
+```
+
 ### Accessing the parent
 
 When you need the parent in livewire context such as the form, you can add the second argument to your form method:
@@ -76,9 +127,6 @@ level.
 If you do not want this, you can set `shouldRegisterNavigationWhenInContext` to false in the child resource.
 
 ### Notes
-
-You cannot use a child resource for multiple parents, however, you can can have multiple resources pointing to the same
-model.
 
 Just make sure you set a custom slug for the resources so that it builds unique routes.
 
