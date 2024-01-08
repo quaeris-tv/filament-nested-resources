@@ -41,10 +41,11 @@ class NestedEntry
 
     public function getBreadcrumbTitle(): string
     {
-        $res= $this->resource::getRecordTitle($this->resource::getModel()::find($this->id()));
-        if(is_string($res)){
+        $res = $this->resource::getRecordTitle($this->resource::getModel()::find($this->id()));
+        if (is_string($res)) {
             return $res;
         }
+
         return '';
     }
 
