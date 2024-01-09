@@ -41,11 +41,19 @@ abstract class NestedResource extends Resource
         return $parentId instanceof Model ? $parentId->getKey() : $parentId;
     }
 
+<<<<<<< HEAD
     public static function getEloquentQuery(string|int|null $parent = null): Builder
     {
         $query = parent::getEloquentQuery();
         $parentModel = static::getParent()::getModel();
         $key = (new $parentModel)->getKeyName();
+=======
+    public static function getEloquentQuery(string|int $parent = null): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $parentModel = static::getParent()::getModel();
+        $key = (new $parentModel())->getKeyName();
+>>>>>>> dev
 
         $parentScope = 'of'.Str::studly(Str::afterLast(static::getParent()::getModel(), '\\'));
 
@@ -89,7 +97,11 @@ abstract class NestedResource extends Resource
     }
 
     // public static function getUrl($name = 'index', $params = [], $isAbsolute = true): string
+<<<<<<< HEAD
     public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, ?string $panel = null, ?Model $tenant = null): string
+=======
+    public static function getUrl(string $name = 'index', array $parameters = [], bool $isAbsolute = true, string $panel = null, Model $tenant = null): string
+>>>>>>> dev
     {
         $params = $parameters;
 
