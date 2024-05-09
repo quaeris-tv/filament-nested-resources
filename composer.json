@@ -1,0 +1,79 @@
+{
+    "name": "sevendays-digital/filament-nested-resources",
+    "description": "Helpers to work with nested resources",
+    "keywords": [
+        "Sevendays-Digital",
+        "laravel",
+        "filament-nested-resources"
+    ],
+    "homepage": "https://github.com/sevendays-digital/filament-nested-resources",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Harings Rob",
+            "email": "haringsrob@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "filament/filament": "^3.0",
+        "spatie/laravel-package-tools": "^1.13.5",
+        "illuminate/contracts": "^9.0|^10.0|^11.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.0.1",
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^6.0",
+        "orchestra/testbench": "^8.22",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "pestphp/pest-plugin-livewire": "^1.0",
+        "pestphp/pest-plugin-parallel": "^0.3",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^9.5",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "SevendaysDigital\\FilamentNestedResources\\": "src",
+            "SevendaysDigital\\FilamentNestedResources\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SevendaysDigital\\FilamentNestedResources\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "pint": "vendor/bin/pint",
+        "test:pest": "vendor/bin/pest --parallel",
+        "test:phpstan": "vendor/bin/phpstan analyse",
+        "test": [
+            "@test:pest",
+            "@test:phpstan"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SevendaysDigital\\FilamentNestedResources\\FilamentNestedResourcesServiceProvider"
+            ],
+            "aliases": {
+                "FilamentNestedResources": "SevendaysDigital\\FilamentNestedResources\\Facades\\FilamentNestedResources"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
