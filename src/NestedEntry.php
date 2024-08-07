@@ -15,8 +15,7 @@ class NestedEntry
         public string $label,
         public null|string|int $id,
         public array $urlParams,
-    ) {
-    }
+    ) {}
 
     public function getListUrl(): string
     {
